@@ -42,8 +42,8 @@ MeterRegistry registry = new DynatraceMeterRegistry(dynatraceConfig, Clock.SYSTE
 [source,yml]
 ----
 management.metrics.export.dynatrace:
-    # This required
-    api-token: YOURKEY
+    # This is required
+    api-token: YOUR_TOKEN
 
     # This is required
     uri: https://XXXXXXX.live.dynatrace.com
@@ -56,4 +56,75 @@ management.metrics.export.dynatrace:
 
     # The interval at which metrics are sent to Dynatrace. The default is 1 minute.
     step: 1m
+----
+
+== API v2
+
+Dynatrace offers two APIs for metrics ingest, https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/[v1] and https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[v2].
+The examples above show configuration of the v1 API, which is the default.
+The v2 exporter does not require any properties to be set except the version.
+In this case, metrics will be exported to the local OneAgent endpoint (see below).
+
+To use the v2 API, overwrite the `apiVersion` property:
+
+[source,java]
+----
+DynatraceConfig dynatraceConfig = new DynatraceConfig() {
+    @Override
+    public DynatraceApiVersion apiVersion() {
+        return DynatraceApiVersion.V2;
+    }
+
+    @Override
+    @Nullable
+    public String get(String k) {
+        return null;
+    }
+};
+MeterRegistry registry = new DynatraceMeterRegistry(dynatraceConfig, Clock.SYSTEM);
+----
+
+Micrometer's Spring Boot support can also bind the `api-version` property to the config:
+
+[source,yml]
+----
+management.metrics.export.dynatrace:
+    api-version: v2
+----
+
+[[bookmark-oneagent]]*Minimal configuration with a local OneAgent*
+
+In the minimal configuration shown above (no URI or API token) the v2 exporter will attempt to export to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
+Note that this only works if the a OneAgent is running on the machine and https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[the local metric API feature is enabled].
+
+*Configuration with URI and API token*
+
+If no local OneAgent is running on the machine or the metrics should be sent to a specific endpoint, the Dynatrace v2 exporter can be configured with a URL and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
+The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
+It is recommended to limit scope to this permission.
+
+*Additional properties available in the v2 exporter*
+
+When using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace metrics API v2] additional optional properties can be set:
+
+[source,yml]
+----
+management.metrics.export.dynatrace:
+    # only required if not using a local OneAgent endpoint.
+    api-token: YOUR_TOKEN
+    uri: https://XXXXXXX.live.dynatrace.com
+
+
+    # Sets a metric key prefix that is prepended to each exported metric line.
+    metric-key-prefix: "your.key.prefix"
+
+    # If set to true and a local OneAgent is running, exports OneAgent metadata to the specified Dynatrace endpoint.
+    enrich-with-one-agent-metadata: true
+
+    # Sets an arbitrary number of key-value pairs as default dimensions.
+    # Micrometer tags will overwrite these dimensions, if the same key appears twice.
+    # Each exported metric will contain these dimensions.
+    default-dimensions:
+        key1: "value1"
+        key2: "value2"
 ----
