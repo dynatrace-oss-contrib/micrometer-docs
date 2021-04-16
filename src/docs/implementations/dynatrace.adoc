@@ -4,11 +4,17 @@ Jon Schneider <jschneider@pivotal.io>
 :sectnums:
 :system: dynatrace
 
-Dynatrace is a dimensional time-series SaaS with built-in dashboarding.
+https://www.dynatrace.com/[*Dynatrace*] is a Software Intelligence Platform featuring application performance monitoring (APM), artificial intelligence for operations (AIOps), IT infrastructure monitoring, digital experience management (DEM), and digital business analytics capabilities.
+It can ingest multi-purpose dimensional time-series data and has built-in dashboarding. Both SaaS and self-hosted (Managed) deployments are offered.
 
 include::install.adoc[]
 
 == Configuring
+
+=== API v1
+When the apiVersion is configured to "v1", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/custom-metrics/[Dynatrace Timeseries API v1 for custom metrics].
+The reported metrics will be assigned to https://www.dynatrace.com/support/help/dynatrace-api/environment-api/topology-and-smartscape/custom-device-api/report-custom-device-metric-via-rest-api/[custom devices] in Dynatrace.
+If no apiVersion is specified, it will default to "v1".
 
 [source,java]
 ----
@@ -58,7 +64,7 @@ management.metrics.export.dynatrace:
     step: 1m
 ----
 
-== API v2
+=== API v2
 
 Dynatrace offers two APIs for metrics ingest, https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/[v1] and https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[v2].
 The examples above show configuration of the v1 API, which is the default.
