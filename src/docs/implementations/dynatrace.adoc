@@ -53,7 +53,7 @@ management.metrics.export.dynatrace:
     api-token: YOUR_TOKEN
 
     # This is required
-    uri: https://YOUR_ENV.live.dynatrace.com
+    uri: https://{your-environment-id}.live.dynatrace.com
 
     # This is required
     device-id: sample
@@ -118,7 +118,7 @@ When using the https://www.dynatrace.com/support/help/dynatrace-api/environment-
 management.metrics.export.dynatrace:
     # only required if not using a local OneAgent endpoint.
     api-token: YOUR_TOKEN
-    uri: https://XXXXXXX.live.dynatrace.com
+    uri: https://{your-environment-id}.live.dynatrace.com // or "https://{your-domain}/e/{your-environment-id}/" on Managed
 
     # Sets a prefix that is prepended to each exported metric key.
     metric-key-prefix: "your.key.prefix"
