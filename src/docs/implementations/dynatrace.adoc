@@ -12,6 +12,7 @@ include::install.adoc[]
 == Configuring
 
 === API v1
+
 When the apiVersion is configured to "v1", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/custom-metrics/[Dynatrace Timeseries API v1 for custom metrics].
 The reported metrics will be assigned to https://www.dynatrace.com/support/help/dynatrace-api/environment-api/topology-and-smartscape/custom-device-api/report-custom-device-metric-via-rest-api/[custom devices] in Dynatrace.
 If no apiVersion is specified, it will default to "v1".
@@ -52,7 +53,7 @@ management.metrics.export.dynatrace:
     api-token: YOUR_TOKEN
 
     # This is required
-    uri: https://XXXXXXX.live.dynatrace.com
+    uri: https://YOUR_ENV.live.dynatrace.com
 
     # This is required
     device-id: sample
@@ -66,7 +67,7 @@ management.metrics.export.dynatrace:
 
 === API v2
 
-Dynatrace offers two APIs for metrics ingest, https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/[v1] and https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[v2].
+When the API version is configured to "v2", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Metrics API v2].
 The v2 exporter does not require any properties to be set except the version.
 In this case, metrics will be exported to the local OneAgent endpoint (see below).
 
@@ -99,12 +100,12 @@ management.metrics.export.dynatrace:
 
 [[bookmark-oneagent]]*Minimal configuration with a local OneAgent*
 
-In the minimal configuration shown above (no URI or API token) the v2 exporter will attempt to export to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
+In the minimal configuration shown above (no URI or API token), the v2 exporter will attempt to export to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
 Note that this only works if the a OneAgent is running on the machine and https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[the local metric API feature is enabled].
 
 *Configuration with URI and API token*
 
-If no local OneAgent is running on the machine or the metrics should be sent to a specific endpoint, the Dynatrace v2 exporter can be configured with a URL and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
+If no local OneAgent is running on the machine or the metrics should be sent to a specific endpoint, the Dynatrace v2 exporter can be configured with a Dynatrace environment URL and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
 It is recommended to limit scope to this permission.
 
@@ -119,8 +120,7 @@ management.metrics.export.dynatrace:
     api-token: YOUR_TOKEN
     uri: https://XXXXXXX.live.dynatrace.com
 
-
-    # Sets a metric key prefix that is prepended to each exported metric line.
+    # Sets a prefix that is prepended to each exported metric key.
     metric-key-prefix: "your.key.prefix"
 
     # If set to true and a local OneAgent is running, exports OneAgent metadata to the specified Dynatrace endpoint.
