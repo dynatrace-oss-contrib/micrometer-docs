@@ -15,9 +15,10 @@ include::install.adoc[]
 
 For setting up new integrations with Dynatrace, it is recommended to use the latest version of the API (`api-version: v2`).
 
-Use the following code in your project to export micrometer metrics to the specified Dynatrace endpoint. 
+Use the following code in your project to export Micrometer metrics to the specified Dynatrace endpoint. 
 https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[The Dynatrace API token documentation] contains more information on how to create an API token.
 The metrics ingest (`metrics.ingest`) permission is required on the token in order to ingest metrics.
+More info on how to use the v2 API is provided <<bookmark-apiv2, below>>.
 
 [source,java]
 ----
@@ -110,7 +111,7 @@ management.metrics.export.dynatrace:
     step: 1m
 ----
 
-=== API v2
+=== API v2 [[bookmark-apiv2]]
 
 When the API version is configured to "v2", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Metrics API v2].
 The v2 exporter does not require any properties to be set except the version.
