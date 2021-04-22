@@ -143,7 +143,7 @@ management.metrics.export.dynatrace:
         key2: "value2"
 ----
 
-These properties can also be set in code, by overwriting the respective functions.
+These properties can also be set in code by overwriting the respective functions.
 
 === API v1 (Legacy)
 
