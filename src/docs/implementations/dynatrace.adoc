@@ -12,6 +12,7 @@ include::install.adoc[]
 == Configuring
 
 For setting up new integrations with Dynatrace, it is recommended to use the latest version of the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace Metrics API] (`api-version: v2`).
+More details on how to use the v2 API are provided further <<bookmark-apiv2, below>>.
 
 
 === Using a Dynatrace OneAgent installed on the host (preferred) [[bookmark-oneagent-example]]
@@ -52,7 +53,6 @@ If no Dynatrace OneAgent is available, both the Dynatrace Metrics API v2 endpoin
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[Dynatrace API token documentation] contains more information on how to create an API token.
 The 'Ingest metrics' (`metrics.ingest`) permission is required on the token in order to ingest metrics.
 It is recommended to limit scope to only this permission.
-More information on how to use the v2 API is provided <<bookmark-apiv2, below>>.
 
 [source,java]
 ----
@@ -107,7 +107,7 @@ management.metrics.export.dynatrace:
 === API v2 [[bookmark-apiv2]]
 
 When the API version is configured to "v2", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Metrics API v2].
-The v2 exporter does not require any properties to be set except the version.
+The v2 exporter does not require any properties to be set except for the version.
 In this case, metrics will be exported to the local OneAgent endpoint.
 If no OneAgent is running on the target host, it is possible to specify an endpoint and an API token in order to export metrics to that specific endpoint.
 
@@ -115,6 +115,7 @@ If no OneAgent is running on the target host, it is possible to specify an endpo
 
 In the minimal configuration <<bookmark-oneagent-example, shown above>> (no URI or API token), the v2 exporter will attempt to export to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
 Note that this only works if the a OneAgent is running on the host and the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[local OneAgent Metric API] is available.
+If the ingestion port was changed to a custom one, the full endpoint URI has to be provided for the URI property (with API token left empty).
 
 *Configuration with URI and API token*
 
@@ -162,7 +163,7 @@ management.metrics.export.dynatrace:
     step: 60s
 ----
 
-These properties can also be set in code by overwriting the respective functions.
+These properties can also be set in code by overwriting the respective methods.
 
 === API v1 (Legacy)
 
