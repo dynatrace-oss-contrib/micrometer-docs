@@ -48,6 +48,7 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
     @Override
     @Nullable
     public String get(String k) {
+        // This method for retrieving arbitrary config items introduced by the interface is currently not used in DynatraceConfig.
         return null;
     }
 };
@@ -112,7 +113,7 @@ If no local OneAgent is running on the host or the metrics should be sent to a d
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
 It is recommended to limit scope to only this permission.
 
-The entire Metrics v2 API endpoint URI has to be specified including its path, i.e., with the path `/api/v2/metrics/ingest` on SaaS and managed deployments, or `/metrics/ingest` for OneAgent endpoints as mentioned in the docs.
+The entire Metrics v2 API endpoint URI has to be specified including its path, i.e., with the path `/api/v2/metrics/ingest` on SaaS and managed deployments, or `/metrics/ingest` for OneAgent endpoints as mentioned in the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/post-ingest-metrics/[documentation].
 
 *Properties available in the v2 exporter*
 
