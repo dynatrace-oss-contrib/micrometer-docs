@@ -15,7 +15,7 @@ include::install.adoc[]
 
 For setting up new integrations with Dynatrace, it is recommended to use the latest version of the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace Metrics API] (`api-version: v2`).
 
-Use the following code in your project to export Micrometer metrics to the specified Dynatrace endpoint. 
+Use the following code in your project to export Micrometer metrics to the specified Dynatrace endpoint.
 If a Dynatrace OneAgent is installed on the host running Micrometer, metrics can be exported directly using the OneAgent without having to specify an endpoint URI or API token (see <<bookmark-oneagent, below>>).
 If no Dynatrace OneAgent is available, both the Dynatrace Metrics API v2 endpoint and an API token have to be specified.
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[Dynatrace API token documentation] contains more information on how to create an API token.
@@ -109,7 +109,7 @@ Note that this only works if the a OneAgent is running on the host and the https
 
 *Configuration with URI and API token*
 
-If no local OneAgent is running on the host or the metrics should be sent to a different endpoint (e.g, a different tenant), the Dynatrace v2 exporter can be configured with an explicit endpoint URI and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
+If no local OneAgent is running on the host or the metrics should be sent to a different endpoint (e.g., a different tenant), the Dynatrace v2 exporter can be configured with an explicit endpoint URI and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
 It is recommended to limit scope to only this permission.
 
@@ -127,7 +127,7 @@ management.metrics.export.dynatrace:
 
     # required if not using a local OneAgent endpoint.
     uri: https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest
-    # or https://your-domain/e/{your-environment-id}/api/v2/metrics/ingest on Managed
+    # or https://{your-domain}/e/{your-environment-id}/api/v2/metrics/ingest on Managed
 
     # It is *not* recommended to put the token into the YAML file directly.
     # It should be read from environment variables or System properties instead, e. g., using `api-token: ${ENV_VAR_DT_INGEST_TOKEN}`
