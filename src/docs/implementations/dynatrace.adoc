@@ -13,11 +13,14 @@ include::install.adoc[]
 
 === Setup
 
-For setting up new integrations with Dynatrace, it is recommended to use the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[latest version] of the https://www.dynatrace.com/support/help/dynatrace-api/[API] (`api-version: v2`).
+For setting up new integrations with Dynatrace, it is recommended to use the latest version of the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace Metrics API] (`api-version: v2`).
 
 Use the following code in your project to export Micrometer metrics to the specified Dynatrace endpoint. 
-https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[The Dynatrace API token documentation] contains more information on how to create an API token.
+If a Dynatrace OneAgent is installed on the host running Micrometer, metrics can be exported directly using the OneAgent without having to specify an endpoint URI or API token (see <<bookmark-oneagent, below>>).
+If no Dynatrace OneAgent is available, both the Dynatrace Metrics API v2 endpoint and an API token have to be specified.
+The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[Dynatrace API token documentation] contains more information on how to create an API token.
 The 'Ingest metrics' (`metrics.ingest`) permission is required on the token in order to ingest metrics.
+It is recommended to limit scope to only this permission.
 More information on how to use the v2 API is provided <<bookmark-apiv2, below>>.
 
 [source,java]
@@ -30,16 +33,16 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
 
     @Override
     public String uri() {
-        // Read the URI from the environment variables or a config file
-        // Should contain the path, e. g.: https://your-environment-id.live.dynatrace.com/api/v2/metrics/ingest
-        return MY_DYNATRACE_URI;
+        // The endpoint of the Dynatrace Metrics API v2 including path, e. g., "https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest".
+        // To be read from environment variables or a config file.
+        return MY_DYNATRACE_URI; // or `return "";` to automatically use the local OneAgent endpoint
     }
 
     @Override
     public String apiToken() {
         // Read from the environment or a config file.
-        // We do *not* recommend hardcoding token or URI here.
-        return MY_TOKEN;
+        // It is *not* recommended to place secrets in config files but rather to read them from env vars, for example.
+        return MY_TOKEN; // or `return "";` to automatically use the local OneAgent endpoint
     }
 
     @Override
@@ -60,9 +63,9 @@ management.metrics.export.dynatrace:
     enabled: true
 
     api-version: v2
-    # e. g. https://your-environment-id.live.dynatrace.com/api/v2/metrics/ingest
-    uri: ${ENV_VAR_DT_INGEST_URI}   
-    api-token: ${ENV_VAR_DT_INGEST_TOKEN}
+    # e. g. https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest
+    uri: ${ENV_VAR_DT_INGEST_URI}         # the local OneAgent endpoint is used if omitted
+    api-token: ${ENV_VAR_DT_INGEST_TOKEN} # the local OneAgent endpoint is used if omitted
 ----
 
 === API v2 [[bookmark-apiv2]]
@@ -98,22 +101,22 @@ management.metrics.export.dynatrace:
     api-version: v2
 ----
 
-[[bookmark-oneagent]]*Minimal configuration with a local OneAgent*
+[[bookmark-oneagent]]*Minimal configuration with a local Dynatrace OneAgent*
 
 In the minimal configuration shown above (no URI or API token), the v2 exporter will attempt to export to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
-Note that this only works if the a OneAgent is running on the machine and https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[the local metric API feature is enabled].
+Note that this only works if the a OneAgent is running on the host and the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[local OneAgent Metric API] is available.
 
 *Configuration with URI and API token*
 
-If no local OneAgent is running on the machine or the metrics should be sent to a specific endpoint, the Dynatrace v2 exporter can be configured with a Dynatrace environment URL and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
+If no local OneAgent is running on the host or the metrics should be sent to a different endpoint (e.g, a different tenant), the Dynatrace v2 exporter can be configured with an explicit endpoint URI and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
-It is recommended to limit scope to this permission.
+It is recommended to limit scope to only this permission.
 
-Please also ensure that the endpoint URL is complete, i. e. it contains the path `/api/v2/metrics/ingest` on SaaS and managed deployments, or `/metrics/ingest` for OneAgent endpoints.
+The entire Metrics v2 API endpoint URI has to be specified including its path, i.e., with the path `/api/v2/metrics/ingest` on SaaS and managed deployments, or `/metrics/ingest` for OneAgent endpoints as mentioned in the docs.
 
 *Properties available in the v2 exporter*
 
-When using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace metrics API v2] additional optional properties can be set:
+When using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace metrics API v2], additional optional properties can be set:
 
 [source,yml]
 ----
@@ -122,17 +125,17 @@ management.metrics.export.dynatrace:
     api-version: v2
 
     # required if not using a local OneAgent endpoint.
-    uri: https://your-environment-id.live.dynatrace.com/api/v2/metrics/ingest
+    uri: https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest
     # or https://your-domain/e/{your-environment-id}/api/v2/metrics/ingest on Managed
 
-    # We do *not* recommend putting the token or URI into the .yml file in clear text.
-    # We suggest using environment variables, e. g. api-token: ${ENV_VAR_DT_INGEST_TOKEN}
+    # It is *not* recommended to put the token into the YAML file directly.
+    # It should be read from environment variables or System properties instead, e. g., using `api-token: ${ENV_VAR_DT_INGEST_TOKEN}`
     api-token: YOUR_TOKEN
 
     # Sets a prefix that is prepended to each exported metric key.
     metric-key-prefix: your.key.prefix
 
-    # If set to true and a local OneAgent is running, exports OneAgent metadata to the specified Dynatrace endpoint (default: false)
+    # If set to true and a local OneAgent is running, retrieves process and host metadata and adds it as additional dimensions to all data points (default: false)
     enrich-with-one-agent-metadata: true
 
     # Sets an arbitrary number of key-value pairs as default dimensions.
@@ -149,22 +152,22 @@ These properties can also be set in code by overwriting the respective functions
 
 When the apiVersion is configured to "v1", the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/custom-metrics/[Dynatrace Timeseries API v1 for custom metrics].
 The reported metrics will be assigned to https://www.dynatrace.com/support/help/dynatrace-api/environment-api/topology-and-smartscape/custom-device-api/report-custom-device-metric-via-rest-api/[custom devices] in Dynatrace.
-If no apiVersion is specified, it will default to "v1".
+If no apiVersion is specified, it will default to "v1" for backwards-compatibility with earlier setups.
 
-For the v1 API, do not specify the ingest path, but only the base URL of your environment, e. g. `uri: https://your-environment-id.live.dynatrace.com`
+For the v1 API, do not specify the ingest path, but only the base URL of your environment, e. g. `uri: https://{your-environment-id}.live.dynatrace.com`
 
 [source,java]
 ----
 DynatraceConfig dynatraceConfig = new DynatraceConfig() {
     @Override
     public String uri() {
-        // Should *not* contain the path, e. g.: https://your-environment-id.live.dynatrace.com
+        // The Dynatrace environment URI without any path, e. g.: https://{your-environment-id}.live.dynatrace.com
         return MY_DYNATRACE_URI;
     }
 
     @Override
     public String apiToken() {
-        // We do *not* recommend hardcoding token or URI here.
+        // It is *not* recommended to place secrets in config files but rather to read them from env vars, for example.
         return MY_TOKEN;
     }
 
