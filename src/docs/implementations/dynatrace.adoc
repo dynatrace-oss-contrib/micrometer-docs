@@ -143,9 +143,9 @@ management.metrics.export.dynatrace:
     uri: https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest
     # or https://{your-domain}/e/{your-environment-id}/api/v2/metrics/ingest on Managed
 
-    # It is *not* recommended to put the token into the YAML or .properties file directly.
+    # It is *not* recommended to put the token into the YAML or properties file directly.
     # It should be read from a secure source instead.
-    # e.g.: using `api-token: ${ENV_VAR_DT_INGEST_TOKEN}` to read from the environment.
+    # E.g. using `api-token: ${ENV_VAR_DT_INGEST_TOKEN}` to read from the environment.
     api-token: MY_TOKEN
 
     # Sets a prefix that is prepended to each exported metric key.
