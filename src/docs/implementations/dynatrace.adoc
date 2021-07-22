@@ -274,7 +274,7 @@ management.metrics.export.dynatrace:
     api-token: MY_TOKEN
 
     # When setting the device id, metrics will be exported to the v1 timeseries endpoint
-    # Using just device id (without v1) is deprecated, but will work to maintain backwards compatibility.
+    # Using just device-id (without the v1 prefix) is deprecated, but will work to maintain backwards compatibility.
     v1:
         device-id: sample
 
