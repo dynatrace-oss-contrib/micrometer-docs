@@ -53,13 +53,6 @@ It is recommended to limit scope to only this permission.
 
 [source,java]
 ----
-// In this case, endpoint and token are read from environment variables, but they could also be passed via command line parameters, for example.
-String readEndpoint = System.getenv("DT_METRICS_INGEST_URL");
-// Use local OneAgent endpoint if reading from the environment fails.
-final String endpoint = readEndpoint == null ? "http://localhost:14499/metrics/ingest" : readEndpoint;
-String readApiToken = System.getenv("DT_METRICS_INGEST_API_TOKEN");
-final String apiToken = readApiToken == null ? "" : readApiToken;
-
 DynatraceConfig dynatraceConfig = new DynatraceConfig() {
     @Override
     public DynatraceApiVersion apiVersion() {
@@ -71,13 +64,15 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
         // The endpoint of the Dynatrace Metrics API v2 including path, e.g.:
         // "https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest".
         // Should be read from a secure source and not hard-coded.
-        return endpoint;
+        String endpoint = System.getenv("DT_METRICS_INGEST_URL");
+        return endpoint != null ? endpoint : DynatraceConfig.super.uri();
     }
 
     @Override
     public String apiToken() {
         // It is *not* recommended to place secrets in config files but to read them from a secure source.
-        return apiToken;
+        String token = System.getenv("DT_METRICS_INGEST_API_TOKEN");
+        return token != null ? token : "";
     }
 
     @Override
@@ -173,14 +168,6 @@ These properties can also be set in code by overwriting the respective methods o
 
 [source,java]
 ----
-String readEndpoint = System.getenv("DT_METRICS_INGEST_URL");
-final String endpoint = readEndpoint == null ? "http://localhost:14499/metrics/ingest" : readEndpoint;
-String readApiToken = System.getenv("DT_METRICS_INGEST_API_TOKEN");
-final String apiToken = readApiToken == null ? "" : readApiToken;
-// default dimensions
-Map<String, String> dims = new HashMap<String,String>();
-dims.put("dimensionKey", "dimensionValue");
-
 DynatraceConfig dynatraceConfig = new DynatraceConfig() {
     @Override
     public DynatraceApiVersion apiVersion() {
@@ -192,13 +179,15 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
         // The endpoint of the Dynatrace Metrics API v2 including path, e.g.:
         // "https://{your-environment-id}.live.dynatrace.com/api/v2/metrics/ingest".
         // Should be read from a secure source and not hard-coded.
-        return endpoint;
+        String endpoint = System.getenv("DT_METRICS_INGEST_URL");
+        return endpoint != null ? endpoint : DynatraceConfig.super.uri();
     }
 
     @Override
     public String apiToken() {
         // It is *not* recommended to place secrets in config files but to read them from a secure source.
-        return apiToken;
+        String token = System.getenv("DT_METRICS_INGEST_API_TOKEN");
+        return token != null ? token : "";
     }
 
     @Override
@@ -215,6 +204,8 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
     @Override
     public Map<String, String> defaultDimensions() {
         // create and return a map containing the desired key-value pairs.
+        Map<String, String> dims = new HashMap<String,String>();
+        dims.put("dimensionKey", "dimensionValue");
         return dims;
     }
 
