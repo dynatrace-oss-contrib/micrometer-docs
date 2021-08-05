@@ -238,8 +238,7 @@ For more information about the metadata picked up by the Dynatrace metadata enri
 
 When the apiVersion is configured to `v1`, the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v1/custom-metrics/[Dynatrace Timeseries API v1 for custom metrics].
 If a `deviceId` is specified, it will default to `v1` for backwards compatibility with earlier setups.
-The `device-id` property, is required for `v1` and not used in `v2`.
-Therefore, if the `deviceId` property is set, all data will be exported to the v1 endpoint.
+The `device-id` property is required for `v1` and not used in `v2`.
 Existing setups will continue to work when updating to newer versions of Micrometer.
 The reported metrics will be assigned to https://www.dynatrace.com/support/help/dynatrace-api/environment-api/topology-and-smartscape/custom-device-api/report-custom-device-metric-via-rest-api/[custom devices] in Dynatrace.
 
