@@ -13,12 +13,12 @@ include::install.adoc[]
 For setting up new integrations with Dynatrace, it is recommended to use the latest version of the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Dynatrace Metrics API] (v2).
 Dynatrace provides different ways of setting up integrations:
 
-=== Using Dynatrace autoconfiguration (preferred) [[bookmark-autoconfiguration]]
+=== Using Dynatrace auto-configuration (preferred) [[bookmark-auto-configuration]]
 
-Dynatrace autoconfiguration is available for hosts that are monitored by a OneAgent or by the Dynatrace Kubernetes Operator.
+Dynatrace auto-configuration is available for hosts that are monitored by a OneAgent or by the Dynatrace Operator for Kubernetes.
 
 If a Dynatrace OneAgent is installed on the host running Micrometer, metrics can be exported directly using the OneAgent without having to specify an endpoint URI or API token.
-If running in Kubernetes with the Dynatrace operator installed, the registry will pick up your Dynatrace cluster endpoint from the operator instead.
+If running in Kubernetes with the Dynatrace operator installed, the registry will pick up your endpoint URI and API token from the operator instead.
 Use the following code in your project to export Micrometer metrics to Dynatrace:
 
 [source,java]
@@ -61,7 +61,7 @@ In this default configuration, metrics will be exported to the local OneAgent or
 
 === Using a custom endpoint
 
-If autoconfiguration is not available on the host, both the Dynatrace Metrics API v2 endpoint and an API token have to be specified.
+If auto-configuration is not available on the host, both the Dynatrace Metrics API v2 endpoint and an API token have to be specified.
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[Dynatrace API token documentation] contains more information on how to create an API token.
 The 'Ingest metrics' (`metrics.ingest`) permission is required on the token in order to ingest metrics.
 It is recommended to limit scope to only this permission.
@@ -125,19 +125,20 @@ management.metrics.export.dynatrace:
 When the API version is configured to `v2`, the registry will send data using the https://www.dynatrace.com/support/help/dynatrace-api/environment-api/metric-v2/[Metrics API v2].
 In order to maintain backwards compatibility, when a `deviceId` is set (which is required for `v1` and not used in `v2`), `v1` is used as the default.
 Otherwise, the version defaults to `v2`, and does not have to be set explicitly.
-With no endpoint URL and token set, metrics will be exported to the local OneAgent endpoint or, if a running in Kubernetes with the Dynatrace operator installed, to the endpoint provided by the operator.
-If neither OneAgent nor Operator configurations are present, it is possible to specify endpoint and token explicitly, in order to export metrics to that specific endpoint.
+With no endpoint URI and token set, metrics will be exported to the local OneAgent endpoint or, if a running in Kubernetes with the Dynatrace operator installed, to the endpoint provided by the operator.
+If no auto-configuration is desired, it is possible to specify endpoint and token explicitly, in order to export metrics to that specific endpoint.
+Explicitly specifying these will overwrite auto-configuration.
 
-*Minimal configuration with Dynatrace autoconfiguration*
+*Minimal configuration with Dynatrace auto-configuration*
 
-In the minimal configuration <<bookmark-autoconfiguration, shown above>> (no URI or API token), the v2 exporter will attempt to retrieve the endpoint provided by the Dynatrace Kubernetes operator.
+In the minimal configuration <<bookmark-auto-configuration, shown above>> (no URI or API token), the v2 exporter will attempt to retrieve the endpoint provided by the Dynatrace Kubernetes operator.
 If the operator is not set up or does not provide this information, the exporter will attempt to send metrics to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
 Note that this only works if the a OneAgent is running on the host and the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[local OneAgent Metric API] is available.
 If the ingestion port for the local OneAgent was changed to a custom one, the full endpoint URI has to be provided for the URI property (with API token left empty).
 
 *Configuration with URI and API token*
 
-If no autoconfiguration is available or the metrics should be sent to a different endpoint (e.g. a different tenant), the Dynatrace v2 exporter can be configured with an explicit endpoint URI and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
+If no auto-configuration is available or the metrics should be sent to a different endpoint (e.g. a different tenant), the Dynatrace v2 exporter can be configured with an explicit endpoint URI and an https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token].
 The https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/[API token] must have the https://www.dynatrace.com/support/help/shortlink/api-authentication#token-permissions["Ingest metrics"] (`metrics.ingest`) permission set.
 It is recommended to limit scope to only this permission.
 
