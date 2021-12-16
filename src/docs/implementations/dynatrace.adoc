@@ -131,7 +131,7 @@ Explicitly specifying these will overwrite auto-configuration.
 
 *Minimal configuration with Dynatrace auto-configuration*
 
-In the minimal configuration <<bookmark-auto-configuration, shown above>> (no URI or API token), the v2 exporter will attempt to retrieve the endpoint provided by the Dynatrace Kubernetes operator.
+In the minimal configuration <<bookmark-auto-configuration, shown above>> (no URI or API token), the v2 registry will attempt to retrieve the endpoint provided by the Dynatrace Kubernetes operator.
 If the operator is not set up or does not provide this information, the exporter will attempt to send metrics to the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/[local OneAgent metrics ingest endpoint].
 Note that this only works if the a OneAgent is running on the host and the https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/local-api/#enable-the-oneagent-metric-api[local OneAgent Metric API] is available.
 If the ingestion port for the local OneAgent was changed to a custom one, the full endpoint URI has to be provided for the URI property (with API token left empty).
