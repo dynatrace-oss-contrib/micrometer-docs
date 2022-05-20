@@ -175,9 +175,9 @@ management.metrics.export.dynatrace:
             key1: "value1"
             key2: "value2"
 
-        # (from 1.9.0) Wheter or not to use the Dynatrace specific summary instruments. (default: true)
-        # This should only be used if problems with existing instrumentation were discovered after upgrading to 1.9.0
-        # Set to false, this will restore the previous (1.8.+) behavior for Timers and DistributionSummaries.
+        # (since 1.9.0) Wheter or not to use the Dynatrace-specific summary instruments. (default: true)
+        # This should only be disabled if problems with existing instrumentation are discovered after upgrading to 1.9.0
+        # Set to false, this will restore the previous (1.8.x) behavior for Timers and DistributionSummaries.
         use-dynatrace-summary-instruments: true
 
     # The export interval in which metrics are sent to Dynatrace (default: 60s).
@@ -228,7 +228,7 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
         return dims;
     }
 
-    // Only available in Micrometer 1.9.0 and later!
+    // Only available in Micrometer 1.9.0 and above
     @Override
     public boolean useDynatraceSummaryInstruments() {
         return false;
