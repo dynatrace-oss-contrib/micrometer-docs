@@ -245,12 +245,12 @@ management.metrics.export.dynatrace:
     step: 60s
 ----
 
-
-
-
 For more information about the metadata picked up by the Dynatrace metadata enrichment feature, see https://www.dynatrace.com/support/help/how-to-use-dynatrace/metrics/metric-ingestion/ingestion-methods/enrich-metrics/[the Dynatrace documentation].
 
-In Micrometer 1.9.0, Dynatrace-specific summary instruments (`DynatraceTimer` and `DynatraceDistributionSummary`) were introduced. These specialized instruments are tailored to the Dynatrace metrics ingest, and prevent the creation of invalid metrics. They are available from version 1.9.0 and are used as a drop-in replacement by default. No action is needed from users upgrading to 1.9.0. If there is a discrepancy in the observed metrics, it is possible to return to the previous behavior by setting the `useDynatraceSummaryInstruments` toggle to `false`.
+In Micrometer 1.9.0, Dynatrace-specific summary instruments (`DynatraceTimer` and `DynatraceDistributionSummary`) were introduced.
+These specialized instruments are tailored to the Dynatrace metrics ingest, and prevent the creation of invalid metrics.
+They are available from version 1.9.0 and are used as a drop-in replacement by default.
+No action is needed from users upgrading to 1.9.0. If there is a discrepancy in the observed metrics, it is possible to return to the previous behavior by setting the `useDynatraceSummaryInstruments` toggle to `false`.
 
 === API v1 (Legacy) [[bookmark-apiv1]]
 
