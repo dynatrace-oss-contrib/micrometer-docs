@@ -116,7 +116,7 @@ MeterRegistry registry = new DynatraceMeterRegistry(dynatraceConfig, Clock.SYSTE
 ----
 
 These properties can also be set via Spring Boot, using property or yaml files.
-It is also possible to reference environment variables using the Spring property placeholders (e.g.: `management.metrics.export.dynatrace.uri: ${DT_METRICS_INGEST_URL}`).
+It is also possible to reference environment variables using the Spring property placeholders (e.g.: `management.metrics.export.dynatrace.uri: ${DT_METRICS_INGEST_URL}` / `management.dynatrace.metrics.export.uri` for Spring Boot 3.0.0 and up).
 
 NOTE: `v2` is used as the default API version unless a `deviceId` is set (<<bookmark-apiv1, see below>>).
 
