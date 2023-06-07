@@ -69,7 +69,7 @@ Spring Boot's Micrometer support binds properties prefixed with `management.dyna
 
 NOTE: Property names for binding attributes from Spring Boot have changed in Spring Boot version 3.0.0. If you use a Spring Boot version before 3.0.0, use `management.metrics.export.dynatrace` instead of `management.dynatrace.metrics.export`. 
 
-This allows configuring the Dynatrace exporter by using <<bookmark-available-properties, the available properties>>.
+Using Spring Boot Micrometer support allows configuring the Dynatrace exporter by using <<bookmark-available-properties, the available properties>>.
 When using Micrometer with Spring Boot, you don't have to instantiate the `DynatraceMeterRegistry` manually as Spring Boot will do it automatically for you.
 All configuration options that can be set by overwriting methods can also be set via Spring Boot properties, and adding a separate MeterRegistry can lead to metrics not being exported as auto-configuration might break.
 
