@@ -135,6 +135,14 @@ management.dynatrace.metrics.export:
     api-token: YOUR_METRICS_INGEST_TOKEN
 ----
 
+=== Meter metadata
+
+Starting with Micrometer 1.12.0, the Dynatrace v2 exporter exports meter metadata to the Dynatrace API via the https://www.dynatrace.com/support/help/extend-dynatrace/extend-metrics/reference/metric-ingestion-protocol#metadata[metrics ingestion protocol].
+Currently supported metadata are unit (called base unit in Micrometer) and description.
+No changes are required to start exporting Metadata to Dynatrace - upgrading to version 1.12.0 or above is enough.
+
+The export of metrics metadata can be turned off by using the `exportMeterMetadata` property on the `DynatraceConfig` (see <<bookmark-available-properties, the section on available properties>> below).
+
 == API Versions
 
 === API v2 [[bookmark-apiv2]]
@@ -213,6 +221,12 @@ DynatraceConfig dynatraceConfig = new DynatraceConfig() {
         return false;
     }
 
+    // Only available in Micrometer 1.12.0 and above
+    @Override
+    public boolean exportMeterMetadata() {
+        return true;
+    }
+
     @Override
     @Nullable
     public String get(String k) {
@@ -254,6 +268,9 @@ management.dynatrace.metrics.export:
         # This should only be disabled if problems with existing instrumentation are discovered after upgrading to 1.9.0.
         # Set to false, this will restore the previous (1.8.x) behavior for Timers and DistributionSummaries.
         use-dynatrace-summary-instruments: true
+
+        # (since 1.12.0) Determines whether meter metadata (unit, description) should be exported.
+        export-meter-metadata: true
 
     # The export interval in which metrics are sent to Dynatrace (default: 60s).
     step: 60s
