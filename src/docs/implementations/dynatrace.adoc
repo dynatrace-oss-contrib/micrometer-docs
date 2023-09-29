@@ -138,10 +138,10 @@ management.dynatrace.metrics.export:
 === Meter metadata
 
 Starting with Micrometer 1.12.0, the Dynatrace v2 exporter exports meter metadata to the Dynatrace API via the https://www.dynatrace.com/support/help/extend-dynatrace/extend-metrics/reference/metric-ingestion-protocol#metadata[metrics ingestion protocol].
-Currently supported metadata are unit (called base unit in Micrometer) and description.
+Currently supported types of metadata are *unit* (called "base unit" in Micrometer) and *description*.
 No changes are required to start exporting Metadata to Dynatrace - upgrading to version 1.12.0 or above is enough.
 
-The export of metrics metadata can be disabled via the `exportMeterMetadata` property on the `DynatraceConfig` (see <<bookmark-available-properties, the section on available properties>> below).
+The export of metrics metadata can be disabled by setting the `exportMeterMetadata` property on the `DynatraceConfig` (see <<bookmark-available-properties, the section on available properties>> below) to `false`.
 
 == API Versions
 
